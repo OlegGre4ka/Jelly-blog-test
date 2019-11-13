@@ -7,25 +7,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NewsComponent } from './components/news/news.component';
 import { ApiInterceptor } from './shared/api.interceptor';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { ClarityModule } from '@clr/angular';
 import { AuthorsComponent } from './components/authors/authors.component';
 import {MatCardModule} from '@angular/material/card';
+import { PersonalPageComponent } from './components/authors/personal-page/personal-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewsComponent,
-    AuthorsComponent
+    AuthorsComponent,
+    PersonalPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatMenuModule,
     MatButtonModule,
     MatIconModule,
     ClarityModule,

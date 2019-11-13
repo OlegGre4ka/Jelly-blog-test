@@ -1,9 +1,11 @@
 .card-author{
     padding:15px;
-    // margin:10px;
     .example-card{
         text-align: center;
         background-color: rgb(241, 185, 116);
-        min-height:250px;
+        min-height:300px;
+        .content,.coments{
+            text-align: left;
+        }
     }
 }

@@ -1,0 +1,29 @@
+.row{
+    div{
+        h3{
+            text-align: center;
+            text-transform:capitalize;
+        }
+    }
+    .clr-col-md-3{
+.back-icon{
+    color:red;
+    width:35px;
+    margin:25px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+    }
+}
+.card-author{
+    padding:15px;
+    .example-card{
+        text-align: center;
+        background-color: rgb(241, 185, 116);
+        min-height:300px;
+        .content,.coments{
+            text-align: left;
+        }
+    }
+}

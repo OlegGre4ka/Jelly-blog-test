@@ -1,3 +1,13 @@
+<div class="row">
+    <div>
+        <h3>{{authorName}}'s page</h3>
+    </div>
+    <div class="clr-col-md-3 ">
+        <i title="Back!" class="material-icons back-icon" (click)="moveToBack()">
+            arrow_back
+        </i>
+    </div>
+</div>
 <div class="clr-row">
     <div class="clr-col-md-6 card-author" *ngFor="let post of posts">
         <mat-card class=" example-card">

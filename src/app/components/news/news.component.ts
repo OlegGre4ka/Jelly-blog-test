@@ -7,24 +7,55 @@ import { ApiService } from 'src/app/shared/api.service';
   styleUrls: ['./news.component.scss']
 })
 export class NewsComponent implements OnInit {
+  posts: any = [];
+  users: any = [];
+  comments: any = [];
 
-  constructor(private apiService:ApiService) { }
-posts:any=[];
+  constructor(private apiService: ApiService) { }
+
   ngOnInit() {
-    this.apiService.getPostsData().subscribe(
-      data=>{
-        console.log(data,'posts');
-        this.posts = [...data];
+    this.apiService.getUsersData().subscribe(
+      users => {
+        this.users = [...users]
       }
     )
 
-    this.apiService.getUsersData().subscribe(
-      data=>console.log(data,'users')
-    )
-
     this.apiService.getCommentsData().subscribe(
-      data=>console.log(data,'comments')
+      comments => {
+        this.comments = [...comments]
+      }
     )
-  }
 
+    this.apiService.getPostsData().subscribe(
+      data => {
+        this.posts = [...data];
+
+        this.posts.map(post => {
+          this.users.map(
+            user => {
+              if (user.id === post.author) {
+                post.author = user.username;
+              // if(post.author===user.id){
+              //   setTimeout(
+              //     ()=>post.author = user.username
+              //     ,100
+              //     )
+              // }
+           
+              }
+            })
+          this.comments.map(
+            comment => {
+              if (comment.post === post.id) {
+                post['comment'] = comment.body;
+              }
+            })
+        })
+      })
+  }
 }
+
+
+
+
+
