@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/shared/api.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-personal-page',
@@ -11,60 +12,50 @@ export class PersonalPageComponent implements OnInit {
   posts: any = [];
   users: any = [];
   comments: any = [];
-  authorName:string;
-  constructor(private router: Router, private apiService: ApiService, private route:ActivatedRoute) { }
+  authorName: string;
+  constructor(private router: Router, private apiService: ApiService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.apiService.getUsersData().subscribe(
-      users => {
-        this.users = [...users]
-      }
-    )
-
     this.apiService.getCommentsData().subscribe(
       comments => {
-        this.comments = [...comments]
+        this.comments = comments
       }
     )
 
-    this.apiService.getPostsData().subscribe(
-      data => {
-        this.posts = [...data];
-        this.posts = this.posts.filter(post => {
+    this.apiService.getUsersData().pipe(
+      switchMap(users => this.apiService.getPostsData()
+        .pipe(
+          // this pass both posts and users to the next observable in this chain
+          map(posts => ({ posts, users }))
+        ))
+    ).subscribe(({ posts, users }) => {
+      this.users = users;
+      this.posts = posts;
+      this.posts = this.posts.filter(post => {
         return post.author === this.route.snapshot.params['id'].slice(1)
-     
+
+      })
+      this.posts.map(post => {
+        this.users.map(
+          user => {
+            if (user.id === post.author) {
+              post.author = user.username;
+              this.authorName = user.username;
+            }
           })
-          this.posts.map(post => {
-            this.users.map(
-              user => {
-                if (user.id === post.author) {
-                  post.author = user.username;          
-                  this.authorName = user.username;
-                  // if(post.author===user.id){
-                  //   setTimeout(
-                  //     ()=>{
-                  //       post.author = user.username;
-                  //       this.authorName = user.username;
-                  //     },80
-                  //     )
-                  // }
-              
-                }
-              })
-              this.comments.map(
-                comment => {
-                  if (comment.post === post.id) {
-                    post['comment'] = comment.body;
+        this.comments.map(
+          comment => {
+            if (comment.post === post.id) {
+              post['comment'] = comment.body;
 
-                  }
-                })
+            }
           })
+      })
+    })
 
-        })
-
-      }
+  }
 
   moveToBack() {
-      this.router.navigate(['authors'])
-    }
+    this.router.navigate(['authors'])
+  }
 }
